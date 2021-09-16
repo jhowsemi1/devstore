@@ -160,15 +160,10 @@ th,td {
     padding-left: 2em;
 
     width: 55em;
-    height: 53vh;
 
     background-color: white;
-    overflow: hidden;
+    height: auto;
 
-        overflow-y: scroll;
-        height: 2500px;
-
-        max-height: 300px;
 }
 
 .estoque{
@@ -235,7 +230,7 @@ input {
 
 .imagens img{
     width: 3.1em;
-    height: 2.1em;
+    height: auto;
 }
 
 

@@ -1,8 +1,17 @@
 import { Conteiner } from "./styled.js";
 import  Cabe from "../components/cabecalho/index";
 import Menu from "../menu/index";
+import React, { useState, useRef, useEffect } from 'react'
+import LoadingBar from 'react-top-loading-bar'
 
-import { useState, useEffect} from "react";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 
 import Api from "../../src/service/api"
 
@@ -10,16 +19,16 @@ import Api from "../../src/service/api"
 const api = new Api()
 
 export default function Home(){
-
+    const loading = useRef(null);
      const [cadastro, setCadastro] = useState([]);
      const [nome , setNome] =useState("");
      const [categoria , setCategoria] =useState("");
      const [avaliacao , setAvaliacao] =useState("");
-     const [precode , setPrecode] =useState([]);
-     const [precopor , setPrecopo] =useState([]);
-     const [estoque , setEstoque] =useState([]);
-     const [link , setLink] =useState([]);
-     const [descricao , setDescricao] =useState([]);
+     const [precode , setPrecode] =useState("");
+     const [precopor , setPrecopo] =useState("");
+     const [estoque , setEstoque] =useState("");
+     const [link , setLink] =useState("");
+     const [descricao , setDescricao] =useState("");
      const [idAlterando, setIdAlterando] = useState(0);
 
      async function listar() {
@@ -29,26 +38,30 @@ export default function Home(){
      }
 
      async function inserir() {
+         loading.current.continuousStart();
+         
 
         if(idAlterando == 0) { 
             let r = await api.inserir(nome, categoria, precode, precopor, avaliacao, descricao, estoque, link );
 
             if(r.erro)
-               alert(r.erro);
-            else
-              alert("produto inserido");
-
+            toast.error(`${r.erro}`); 
+            else { 
+              toast.success("produto inserido");
+            limparCampos()
+        }
         } else {
             let r = await api.alterar(idAlterando, nome, categoria, precode, precopor, avaliacao, descricao, estoque, link );
             
             if (r.erro)
-              alert(r.erro);
-            else
-              alert("produto alterado!");
+            toast.error(`${r.erro}`); 
+            else { 
+              toast.success("produto alterado!");
 
-        
+              limparCampos()
+            }
         }
-        limparCampos()
+      
         listar();
      }
 
@@ -66,10 +79,28 @@ export default function Home(){
      }
 
      async function remover(id) {
-         let r = await api.remover(id);
-         alert("aluno removido")
-
-         listar()
+           loading.current.continuousStart();
+            confirmAlert ({
+                title: "remover produto?",
+                message: `tem certeza que deseja remover aluno ${id}`,
+                buttons: [
+                    {
+                        label: "sim",
+                        onClick: async() => {
+                            let r = await api.remover(id);
+                            if(r.erro)
+                               toast.error(`${r.erro}`);
+                            else {
+                                toast.success("produto removido");
+                                listar()
+                            }
+                        }
+                    },
+                    {
+                        label: "nao"
+                    }
+                ]
+            })
      }
 
      async function editar(item) {
@@ -92,12 +123,13 @@ export default function Home(){
 
  return (
   <Conteiner> 
-   
+    <ToastContainer/>
+        <LoadingBar color="red" ref={loading} />
    <Menu/>
 
    <div class="lado-direi"> 
       <Cabe/>
-          
+     
             <div className="segundo"> 
               <div className="produtos">
                   <div className="semi">
@@ -191,7 +223,8 @@ export default function Home(){
                                 <tr className= {i % 2 == 0 ?  "linha1-part" : ""}> 
                                     <td  className="imagens"> <img src={item.img_produto} alt=""/> </td>
                                     <td> {item.id_produto} </td>
-                                    <td> {item.nm_produto != null && item.nm_produto.length >= 25
+                                    <td title={item.nm_produto}>
+                                                  {item.nm_produto != null && item.nm_produto.length >= 25
                                                      ? item.nm_produto.substr(0,25) + "..."
                                                      : item.nm_produto}
                                      </td>

@@ -21,6 +21,53 @@ app.post("/produto", async(req,resp) => {
       
         let g = req.body;
         let data = new Date()
+      
+        if(g.produto == "") { 
+        return resp.send({erro: "o campo nome deve ser preenchido"})
+         }
+       
+         
+        if(g.produto.length < 4)
+         return resp.send({erro: "o campo nome deve conter mais de 4 caracteres"})
+        
+
+         if(g.categoria == "")
+         return resp.send({erro: "o campo categoria é obrigatorio"})
+        
+
+         if(g.categoria.length < 4)
+          return resp.send({erro:"o campo categoria deve conter mais de 4 caracteres "})
+          
+          if (isNaN(g.avaliacao))
+          return resp.send({erro:"o campo avaliacao aceita apenas numeros"})
+        
+
+          if ( isNaN(g.precode))
+           return resp.send({erro:"o campo *Preco De * aceita somente numeros"})
+        
+
+          if(isNaN(g.precopor))
+          return resp.send({erro: " o campo *Preco Por* aceita somente numeros"})
+          
+
+          if(isNaN(g.estoque))
+          return resp.send({erro:" o campo *Estoque* aceita somente numeros"})
+         
+
+          if( g.link === " ")
+          return resp.send({erro: "o campo link da imagem deve ser preenchido"})
+         
+
+          if( g.link < 4 )
+          return resp.send({erro:"o campo link deve conter mais de 4 caracteres"})
+         
+
+          if(g.descricao === "")
+          return resp.send({erro:" o campo descricao deve ser preenchido"})
+
+         let m = await db.tb_produto.findOne({ where: {nm_produto: g.produto}});
+         if ( m != null )
+         return resp.send({erro: "produto ja existente"}) 
 
         let r = await db.tb_produto.create(
             {    
@@ -34,7 +81,7 @@ app.post("/produto", async(req,resp) => {
                 img_produto:g.link,
                 bt_ativo: g.disponivel,
                 dt_inclusao: data,
-                img_produto: g.link
+                
                 
               });
             resp.send(r);
@@ -57,10 +104,10 @@ app.put("/produto/:id", async(req, resp) => {
             vl_preco_por: b.precopor,
             vl_avaliacao: b.avaliacao,
             ds_produto: b.descricao,
-            qtd_estoque: b.estoque,
-            img_produto: b.link,
+            qtd_estoque: b.estoque,           
             bt_ativo: b.disponivel,
-            dt_inclusao: data
+            dt_inclusao: data,
+            img_produto: b.link
             
         },
         {

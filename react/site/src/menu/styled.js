@@ -20,6 +20,10 @@ span{
     padding: 2em 0em 1em 2em;
 }
 
+.gerencia{
+    color: white;
+}
+
 .dev{
     color: white;
     padding-top: 4px;
