@@ -1,91 +1,12 @@
-body {
-    margin: 0;
-    font-family: Roboto;
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
+import styled from "styled-components";
 
-.conteiner{
-    display: flex;
-    flex-direction: column;
+const Conteiner = styled.div`
+  display: flex;
+    flex-direction: row;
     background-color: #F5F5F5;
-}
-
-.ambas{
- display: flex;
- flex-direction: row;
-
-}
-
-
-
-.lado-esq{
-    width: 18%;
-    height: 124vh;
-
-    position: sticky;
-    background-color:#2B3031;
-}
-
-span{
-    color: #119FDC;
-}
-
-
-
-.titulo{
-    display: flex;
-    flex-direction: row;
-    padding: 2em 0em 1em 2em;
-}
-
-.dev{
-    color: white;
-    padding-top: 4px;
-    padding-left: 0.5em;
-}
-
-.gere-segu{
-    display: flex;
-    flex-direction: row;
-
-    padding-left: 2em;
-    padding-top: 1.6em;
-
-}
-
-.gerencia{
-    padding-bottom: 1em;
-}
-
-.back{
-    width: 15.2em;
-    height: 3.4em;
-    background-color: #262626;
-}
-
-.icone{
-    padding-left: 3.5em;
-}
-
-.mae-cab img{
   
-} 
 
-.produ{
-  background: white;
- padding: 1em;
- padding-left: 2em;
-}
-
-
-.lado-direi{
-  
-}
-
-.icone-bol{
+    .icone-bol{
   display: flex;
   flex-direction: row;
 }
@@ -303,7 +224,7 @@ input {
     padding-right: 10px;
 }
 
-.botoes button{
+.botoes {
     background-color: #565656;
     border-radius: 50%;
 
@@ -335,3 +256,23 @@ input {
     flex-direction:row;
     margin-left: 1em;
 }
+
+.linha1-part{
+    background-color: #F5F5F5;
+}
+
+.visuali > button {
+  visibility: hidden;
+}
+
+
+
+tr:hover{
+    .visuali> button{
+        visibility: visible;
+    }
+}
+
+`
+
+export {Conteiner}
